@@ -6,6 +6,7 @@
   Modified by Gustavo Murta
   date : 17/jun/2020
   https://www.esp32.com/viewtopic.php?f=19&t=6533
+  OBS: connect input pin only after reset, or ESP32 will enter in a loop...
 */
 
 const byte        interruptPin = 23;              // Assign the interrupt pin
