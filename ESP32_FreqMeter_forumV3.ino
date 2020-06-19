@@ -11,7 +11,7 @@
 
 const byte        interruptPin = 23;              // Assign the interrupt pin
 volatile uint64_t StartValue = 0;                 // First interrupt value
-volatile uint64_t PeriodCount;                    // period in counts of 0.000001 of a second
+volatile uint64_t PeriodCount;                    // period in counts
 float             Freq;                           // frequency
 
 hw_timer_t * timer = NULL;                        // pointer to a variable of type hw_timer_t
