@@ -52,7 +52,7 @@
 esp_timer_create_args_t create_args;                                      // Argumentos do timer
 esp_timer_handle_t timer_handle;                                          // Instancia de timer
 
-unsigned long overflow = 20000;                                           // Valor maximo para overun de pcnt
+unsigned long overflow = 20000;                                           // Valor maximo para overflow de pcnt
 bool flag = true;                                                         // Indicador de fim de contagem libera impressao
 int16_t pulses = 0;                                                       // Contador de pulsos de entrada
 unsigned long multPulses = 0;                                             // Contador de overflows de pcnt
