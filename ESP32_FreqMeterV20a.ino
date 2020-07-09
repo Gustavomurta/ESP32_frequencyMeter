@@ -1,7 +1,7 @@
 /*
       ESP32 Frequence Meter V20
       Rui Viana 08/jul/2020
-      Colaborator: Gustavo Murta
+      Collaborator: Gustavo Murta
 
       PORT de entrada de pulsos PCNT_INPUT_SIG_IO
       PORT de entrada de controle PCNT_INPUT_CTRL_IO
