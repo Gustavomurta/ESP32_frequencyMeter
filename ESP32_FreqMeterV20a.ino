@@ -56,7 +56,7 @@ unsigned long overflow = 20000;                                           // Val
 bool flag = true;                                                         // Indicador de fim de contagem libera impressao
 int16_t pulses = 0;                                                       // Contador de pulsos de entrada
 unsigned long multPulses = 0;                                             // Contador de overflows de pcnt
-unsigned long  janela = 1000000;                                          // Janela de contagem de pulsos
+unsigned long  janela = 1000000;                                          // Janela de 1 segundo para a contagem de pulsos
 
 portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
 
