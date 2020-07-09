@@ -33,6 +33,10 @@
       será contabilizado na variavel multPulses.
       No final o valor é calculado multiplicando o numero de overflow por 20000 e somando ao numero
       de puslos restantes e dividindo por 2, pois contou 2 vezes.
+      
+      Referências: 
+      https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/esp_timer.html
+      https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/pcnt.html
 */
 
 #include "driver/pcnt.h"                                                  // Pulse count library
