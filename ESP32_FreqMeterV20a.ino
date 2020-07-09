@@ -3,10 +3,10 @@
       Rui Viana 08/jul/2020
       Collaborator: Gustavo Murta
 
-      PORT de entrada de pulsos PCNT_INPUT_SIG_IO
-      PORT de entrada de controle PCNT_INPUT_CTRL_IO
-      PORT de saida de controle OUTPUT_CONTROL_GPIO
-      O PORT de entrada de controle deve ser ligado ao PORT de saida de controle.
+      PORT de entrada do frequencíemtro PCNT_INPUT_SIG_IO (GPIO 34)
+      PORT de entrada de controle PCNT_INPUT_CTRL_IO (GPIO 25) 
+      PORT de saida de controle OUTPUT_CONTROL_GPIO (GPIO 2) 
+      O PORT de entrada de controle (GPIO 25) deve ser ligado ao PORT de saida de controle (GIPIO 2).
 
       Frequencimetro com ESP32
       O frequencimetro é dividido em 4 partes:
@@ -15,7 +15,7 @@
       3. Impressão do resultado;
       4. Espaco para outras funcoes.
 
-     O contador de pulso usa o pcnt do ESP32. O pcnt tem variaos parametros:
+     O contador de pulso usa o pcnt do ESP32. O pcnt tem varios parametros:
           port de entrada;
           port de controle;
           contagem na subida do pulso;
