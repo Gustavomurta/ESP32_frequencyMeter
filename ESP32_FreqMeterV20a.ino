@@ -6,7 +6,7 @@
       PORT de entrada do frequencíemtro PCNT_INPUT_SIG_IO (GPIO 34)
       PORT de entrada de controle PCNT_INPUT_CTRL_IO (GPIO 25) 
       PORT de saida de controle OUTPUT_CONTROL_GPIO (GPIO 2) 
-      O PORT de entrada de controle (GPIO 25) deve ser ligado ao PORT de saida de controle (GIPIO 2).
+      O PORT de entrada de controle (GPIO 25) deve ser ligado ao PORT de saida de controle (GPIO 2).
 
       Frequencimetro com ESP32
       O frequencimetro é dividido em 4 partes:
