@@ -41,8 +41,8 @@
 
 #include "driver/pcnt.h"                                                  // Pulse count library
 
-#define PCNT_COUNT_UNIT       PCNT_UNIT_0                                 // Unidade do pcnt
-#define PCNT_COUNT_CHANNEL    PCNT_CHANNEL_0                              // Canal do pcnt
+#define PCNT_COUNT_UNIT       PCNT_UNIT_0                                 // Unidade 0 do pcnt
+#define PCNT_COUNT_CHANNEL    PCNT_CHANNEL_0                              // Canal 0 do pcnt
 #define PCNT_INPUT_SIG_IO     34                                          // Freq Meter Input GPIO 34
 #define PCNT_INPUT_CTRL_IO    25                                          // Count Control GPIO HIGH=count up, LOW=count down GPIO 25
 #define OUTPUT_CONTROL_GPIO   GPIO_NUM_2                                  // Saida do timer GPIO 2
