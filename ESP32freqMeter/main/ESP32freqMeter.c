@@ -5,14 +5,15 @@
    DATE: 17/jul/2020
    
    ESP32 Dev Kit - ESP-IDF V4.0.1 or ARDUINO IDE 1.8.12
+   This project can be compiled with the arduino IDE or the IDF! (change the extension to .INO to compile Arduino)
+   
    Optional = Parallel LCD or I2C LCD (see pins connections in the program)
    
    Comments, doubts, suggestions = jgustavoam@gmail.com 
 
    The project:
    A high accuracy frequency meter using ESP32, without scales and showing up to 8 digits,
-   measuring up to 20 MHz or more. Very stable. You can test the frequency meter with internal oscillator. 
-   This project can be compiled with the arduino IDE or the IDF! (change the extension to .INO to compile Arduino)
+   measuring up to 20 MHz or more. Very stable. You can test the frequency meter with internal oscillator.    
    Caution = input signal to Freq Meter - only 3.3 Volts! If you want 5 Volts, use level converter. 
 
   Definitions: 
