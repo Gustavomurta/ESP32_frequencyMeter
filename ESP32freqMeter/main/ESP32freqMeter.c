@@ -88,6 +88,10 @@
   
    Using LCD     =   LCD_ON or LCD_OFF
    Using LCD I2C =   LCD_I2C_ON or LCD_I2C_OFF
+   
+   Calculo do ajustes para cada faixa de frequencia
+   Resolucao = log2(Clock(80MHz)/f) + 1   ex: 50.000 HZ = 80.0000/50.000 = 1.600 log2(1600) = 10 + 1 = 11
+   Duty 50%  = (2**Resolucao)/2       ex: 2**11 = 2048   2048/2 = 1024
 
  References: 
  
@@ -133,18 +137,11 @@ LiquidCrystal lcd(5, 18, 19, 21, 22, 23);                                 // Ins
 
 #define PCNT_COUNT_UNIT       PCNT_UNIT_0                                 // Unidade 0 do pcnt
 #define PCNT_COUNT_CHANNEL    PCNT_CHANNEL_0                              // Canal 0 do pcnt
-
-//                 Para usar teste jumper GPIO 25 com GPIO 34
-//                 Port de entrada do frequencimetro  GPIO 34
 #define PCNT_INPUT_SIG_IO     GPIO_NUM_34                                 // Freq Meter Input GPIO 34
 #define LEDC_HS_CH0_GPIO      GPIO_NUM_25                                 // Saida do ledc gerador de pulsos
-
-//                  Necessario jumper entre GPIO 32 e GPIO 35
 #define PCNT_INPUT_CTRL_IO    GPIO_NUM_35                                 // Count Control GPIO HIGH = count up, LOW = count down 
 #define OUTPUT_CONTROL_GPIO   GPIO_NUM_32                                 // Saida do timer GPIO 32 Controla a contagem
-
-#define IN_BOARD_LED          (gpio_num_t)2                                // LED nativo ESP32 GPIO 2
-
+#define IN_BOARD_LED          (gpio_num_t)2                               // LED nativo ESP32 GPIO 2
 #define LEDC_HS_CH0_CHANNEL   LEDC_CHANNEL_0                              // LEDC no canal 0
 #define LEDC_HS_MODE          LEDC_HIGH_SPEED_MODE                        // LEDC em high speed
 #define LEDC_HS_TIMER         LEDC_TIMER_0                                // Usar timer0 do ledc
@@ -155,17 +152,13 @@ uint32_t         overflow  =  20000;                                      // Val
 esp_timer_create_args_t create_args;                                      // Argumentos do esp-timer
 esp_timer_handle_t timer_handle;                                          // Instancia de esp-timer
 
-//  Calculo do ajustes para cada faixa de frequencia
-//  Resolucao = log2(Clock(80MHz)/f) + 1   ex: 50.000 HZ = 80.0000/50.000 = 1.600 log2(1600) = 10 + 1 = 11
-//  Duty 50%  = (2**Resolucao)/2       ex: 2**11 = 2048   2048/2 = 1024
-
 bool            flag          = true;                                     // Indicador de fim de contagem libera impressao
 int16_t         pulses        = 0;                                        // Contador de pulsos de entrada
 uint32_t        multPulses    = 0;                                        // Contador de overflows de pcnt
 uint32_t        janela        = 1000000;                                  // Janela de 1 segundo para a contagem de pulsos
 uint32_t        oscilator     = 2;                                        // Frequencia em Hz
 uint32_t        mDuty         = 0;                                        // Valor calculado do duty
-uint32_t        resolucao         = 0;                                    // Valor calculado da resolucao
+uint32_t        resolucao     = 0;                                        // Valor calculado da resolucao
 
 portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;                     // variavel tipo portMUX_TYPE para sincronismo
 
