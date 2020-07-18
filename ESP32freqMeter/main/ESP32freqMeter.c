@@ -97,6 +97,7 @@
   Formatting numbers  https://arduino.stackexchange.com/questions/28603/the-most-effective-way-to-format-numbers-on-arduino
   https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/esp_timer.html
   https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/pcnt.html
+  https://arduino.stackexchange.com/questions/28603/the-most-effective-way-to-format-numbers-on-arduino
 */
 
 #define LCD_OFF                                                           // Define LCD_ON, para usar LCD, se não, defina LCD_OFF
@@ -167,8 +168,8 @@ uint32_t        mDuty         = 0;                                        // Val
 uint32_t        resolucao         = 0;                                    // Valor calculado da resolucao
 
 portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;                     // variavel tipo portMUX_TYPE para sincronismo
+
 //----------------------------------------------------------------------------------------
-// Sem comentarios originais  https://arduino.stackexchange.com/questions/28603/the-most-effective-way-to-format-numbers-on-arduino
 char *ultos_recursive(unsigned long val, char *s, unsigned radix, int pos)
 {
   int c;
@@ -180,8 +181,8 @@ char *ultos_recursive(unsigned long val, char *s, unsigned radix, int pos)
   if (pos % 3 == 0) *s++ = '.';
   return s;
 }
+
 //----------------------------------------------------------------------------------------
-// Sem comentarios originais  https://arduino.stackexchange.com/questions/28603/the-most-effective-way-to-format-numbers-on-arduino
 char *ltos(long val, char *s, int radix)
 {
   if (radix < 2 || radix > 36) {
@@ -197,6 +198,7 @@ char *ltos(long val, char *s, int radix)
   }
   return s;
 }
+
 //----------------------------------------------------------------------------
 void ledcInit ()
 {
@@ -224,6 +226,7 @@ void ledcInit ()
 
   ledc_channel_config(&ledc_channel);                                     // Configurar o canal do ledc
 }
+
 //----------------------------------------------------------------------------------
 void tempo_controle(void *p)                                              // Fim de tempo de leitura de pulsos
 {
@@ -231,6 +234,7 @@ void tempo_controle(void *p)                                              // Fim
   pcnt_get_counter_value(PCNT_COUNT_UNIT, &pulses);                       // Obtem o valor contado
   flag = true;                                                            // Informa que ocorreu interrupt de controle
 }
+
 //----------------------------------------------------------------------------------
 static void IRAM_ATTR pcnt_intr_handler(void *arg)                        // Overflow de contagem de pulsos
 {
@@ -239,6 +243,7 @@ static void IRAM_ATTR pcnt_intr_handler(void *arg)                        // Ove
   PCNT.int_clr.val = BIT(PCNT_COUNT_UNIT);                                // Limpa indicador de interrupt
   portEXIT_CRITICAL_ISR(&timerMux);                                       // Libera novo interrupt
 }
+
 //----------------------------------------------------------------------------------
 void pcnt_init(void)                                                      // Rotina de inicializacao do pulse count
 {
@@ -264,6 +269,7 @@ void pcnt_init(void)                                                      // Rot
 
   pcnt_counter_resume(PCNT_COUNT_UNIT);                                   // inicia a contagem
 }
+
 //----------------------------------------------------------------------------------
 void myInit()
 {
@@ -285,6 +291,7 @@ void myInit()
   gpio_matrix_in(PCNT_INPUT_SIG_IO, SIG_IN_FUNC226_IDX, false);           // Direciona a entrada de pulsos
   gpio_matrix_out(IN_BOARD_LED, SIG_IN_FUNC226_IDX, false, false);        // Para o LED do ESP32
 }
+
 //---------------------------------------------------------------------------------
 void app_main(void)
 {
@@ -318,6 +325,7 @@ void app_main(void)
   }                                                                       // IDF
 #endif
 }
+
 //---------------------------------------------------------------------------------
 #ifdef ARDUINO                                                            // Arduino
 void setup()
@@ -325,6 +333,7 @@ void setup()
   Serial.begin(115200);                                                   // Inicializa a serial
   myInit();                                                               // Chaama inicializacao
 }
+
 //---------------------------------------------------------------------------------
 void loop()
 {
