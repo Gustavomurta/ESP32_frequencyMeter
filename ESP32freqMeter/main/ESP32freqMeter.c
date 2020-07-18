@@ -5,6 +5,8 @@
    DATE: 17/jul/2020
    
    ESP32 Dev Kit - ESP-IDF V4.01 or ARDUINO IDE 1.8.12
+   
+   Comments, doubts, suggestions = jgustavoam@gmail.com 
 
    The project:
    A high accuracy frequency meter using ESP32, without scales and showing up to 8 digits,
@@ -19,7 +21,8 @@
   GPIO_35 = Pulse Count control input - HIGH =count up, LOW=count down
   GPIO_32 = High Precision Timer output (to control Pulse Counter) 
   
-  Make connection between GPIO_35 to GPIO_32 to run Frequency Meter
+  Make connection between GPIO_35 to GPIO_32 to run Frequency Meter (must have). 
+  To test freq Meter with internal oscillator, make connection between GIPO_25 and GPIO_34 (optional).
   If you need, can change GPIOs pins
     
   The frequency meter is divided into 5 parts:
@@ -52,66 +55,38 @@
        e. duty cycle at 50%;
        
   Operation:
-    The high level count control port releases the counter to count the pulses that arrive at the pulse input port.
-  Pulses are counted both as the pulse rises and falls, to improve the counting average.
-  The counting time is defined by the esp-timer, and it is defined in 1 second, in the window variable.
+  
+  The high level of control port enable the counter to count the pulses that arrive at the input port.
+  Pulses are counted both as the pulse rising and falling, to improve the counting average.
+  The sampling time is defined by the high precision esp-timer, and it is defined in 1 second, in the window variable.
   If the count is greater than 20000 pulses during the counting time, overflow occurs and with each overflow that occurs
-  and 'counted in the multPulses variable, and the pulse counter returns to zero continuing to count.
-    When the reading time ends, a routine is called and the value in the pulse counter is' read and saved,
-    a flag e 'on indicating that the pulse reading has ended
+  is counted in the multPulses variable and then pulse counter is cleared and proceed to counting.
+  Unfortunately the Pulse Counter has only 16 bits that may be used. 
 
-    In the loop, when verifying that the flag indicates that the pulse reading has finished, the value is calculated by multiplying
+  When the sampling time ends, a routine is called and the value in the pulse counter is read and saved.
+  A flag is set on to indicating that the pulse reading has ended.
+
+  In the loop, when verifying if the flag is on indicates that the pulse reading has finished, the value is calculated by multiplying
   the number of overflow by 20000 and adding to the number of remaining pulses and dividing by 2, because it counted 2 times.
+  
   As the pulses are counted on the way up and down, the count is double the frequency.
-    In the frequency, points are inserted and printed on the serial monitor.
-  The registers are reset and the input control port is raised to a high level again and the
-  pulses starts.
+  In the frequency value, points are inserted and printed on the serial monitor.
+  The registers are reset and the input control port is raised to a high level again and the pulse count starts.
 
   It also has a signal generator that generates 50,000 Hz, and can be used for testing.
-  This generator can be changed to generate frequencies up to 40 MHz.
+  This generator can be changed to generate frequencies up to 40 MHz. No, the frequency Meter cannot read this...
   We use the led32 feature of ESP32 to generate frequency that can be used as a test.
-    The base frequency value is 2 (or 50,000) Hz, but it can be typed or another value on the serial monitor
-    The duty was set at 50%
-    The resolution is calculated.
-  The output port of this generator is defined in the #define LEDC_GPIO line.
-  It is currently defined as GPIO 25.
+  The base frequency value is 2 (or 50,000) Hz, but it can be typed or another value on the serial monitor
+  The deafault duty cycle was set at 50%, but the resolution is properly calculated.
+  The output port of this generator is currently defined as GPIO 25.
 
   Internally using GPIO matrix, the input pulse was directed to the ESP32 native LED,
-  so the LED will flash at the input frequency.
+  so the LED will flash at the input frequency. 
   
+   The compiler uses the compilation directives to select:
   
-
-  Funcionamento:
-    O port de controle de contagem em nível alto, libera o contador para contar os pulsos que chegam no port de entrada de pulsos.
-  Os pulsos são contado tanto na subida quanto na descida do pulso, para melhorar a media de contagem.
-  O tempo de contagem é definido pelo esp-timer, e esta' definido em 1 segundo, na variável janela.
-  Se a contagem for maior que 20000 pulsos durante o tempo de contagem, ocorre overflow e a cada overflow que ocorre
-  e' contabilizado na variável multPulses, e o contador de pulso retorna a zero continuando a contar.
-    Quando o tempo de leitura termina, uma rotina é chamada e o valor do no contador de pulsos e' lido e salvo,
-    um flag e' ligado indicando que terminou a leitura dos pulsos
-
-    No loop, ao verificar que o flag indica que terminou a leitura dos pulsos, o valor é calculado multiplicando
-  o numero de overflow por 20000 e somando ao numero de pulsos restantes e dividindo por 2, pois contou 2 vezes.
-  Como o pulsos são contados na subida e na descida, a contagem e´ o dobro da frequência.
-    Na frequência é insserido pontos e impressa no serial monitor.
-  Os registradores são resetados e o port de controle de entrada é novamente elevado para nível alto e a contagem de
-  pulsos se inicia.
-
-  Tem também um gerador de sinais que gera 50.000 Hz, e pode ser usado para testes.
-  Este gerador pode ser alterado para gerar frequencias até 40 MHz.
-  Usamos o recurso ledc do ESP32 para gerar frequencia que pode ser usada como teste.
-    O valor da frequencia base é 2 (ou 50.000) Hz, mas pode ser digitavo outo valor no serial monitor
-    O duty foi fixado como 50%
-    A resulução é calculada.
-  O Port de saida deste gerador é definido na linha #define LEDC_GPIO.
-  Atualmente está definido como GPIO 25.
-
-  Internamente usando GPIO matrix,o pulso de entrada foi direcionado para o LED nativo do ESP32, 
-  assim o LED piscara na frequencia de entrada.
-
- The compiler uses the compilation directives to select:   
-   Using LCD:         LCD_ON or LCD_OFF
-   Using LCD I2C      LCD_I2C_ON ou LCD_I2C_OFF
+   Using LCD     =   LCD_ON or LCD_OFF
+   Using LCD I2C =   LCD_I2C_ON or LCD_I2C_OFF
 
  References: 
  
