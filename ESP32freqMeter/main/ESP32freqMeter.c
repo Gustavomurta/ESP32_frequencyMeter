@@ -89,11 +89,11 @@
    Using LCD     =   LCD_ON or LCD_OFF
    Using LCD I2C =   LCD_I2C_ON or LCD_I2C_OFF
    
-   Calculo do ajustes para cada faixa de frequencia
-   Resolucao = log2(Clock(80MHz)/f) + 1   ex: 50.000 HZ = 80.0000/50.000 = 1.600 log2(1600) = 10 + 1 = 11
-   Duty 50%  = (2**Resolucao)/2       ex: 2**11 = 2048   2048/2 = 1024
+   Calculation of adjustments for each frequency range:
+   Resolution = log2(Clock(80MHz)/f) + 1   ex: 50.000 HZ = 80.0000/50.000 = 1.600 log2(1600) = 10 + 1 = 11
+   Duty cycle 50%  = (2**Resolucao)/2       ex: 2**11 = 2048   2048/2 = 1024
 
- References: 
+   References: 
  
   https://github.com/espressif/esp-idf/tree/master/examples/peripherals/pcnt
   Answer of Deouss » Thu May 17, 2018 3:07 pm no tópico https://esp32.com/viewtopic.php?t=5734
