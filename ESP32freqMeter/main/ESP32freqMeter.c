@@ -5,6 +5,7 @@
    DATE: 17/jul/2020
    
    ESP32 Dev Kit - ESP-IDF V4.0.1 or ARDUINO IDE 1.8.12
+   Optional = Parallel LCD or I2C LCD (see pins connections in the program)
    
    Comments, doubts, suggestions = jgustavoam@gmail.com 
 
