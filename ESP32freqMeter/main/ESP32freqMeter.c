@@ -320,32 +320,32 @@ void app_main(void)
 }
 
 //---------------------------------------------------------------------------------
-#ifdef ARDUINO                                                            // Arduino
+#ifdef ARDUINO                                                            // if Arduino IDE
 void setup()
 {
-  Serial.begin(115200);                                                   // Inicializa a serial
-  myInit();                                                               // Chaama inicializacao
+  Serial.begin(115200);                                                   // Init Serial Console Arduino 115200 Bps 
+  myInit();                                                               // Initial setup
 }
 
 //---------------------------------------------------------------------------------
 void loop()
 {
-  app_main();                                                             // Roda rotina principal
-  String inputString = "";                                                // Temporaria transformar o valor da frequencia
-  oscilator = 0;                                                          // Limpa valor original
-  while (Serial.available())                                              // Enquanto tiver dados na serial
+  app_main();                                                             // main application
+  String inputString = "";                                                // clear temporary string
+  oscilator = 0;                                                          // clear oscillator value 
+  while (Serial.available())                                              
   {
-    char inChar = (char)Serial.read();                                    // Le um byte:
-    inputString += inChar;                                                // Adicione na string:
-    if (inChar == '\n')                                                   // Se new line:
+    char inChar = (char)Serial.read();                                    // Reads a byte on the console
+    inputString += inChar;                                                // Add char to string 
+    if (inChar == '\n')                                                   // If new line (enter)
     {
-      oscilator = inputString.toInt();                                    // Transforma a string em inteiro
-      inputString = "";                                                   // Limpa a string
+      oscilator = inputString.toInt();                                    // Converts String into integer value 
+      inputString = "";                                                   // Clear string
     }
   }
-  if (oscilator != 0)                                                     // Se foi digitado algum valor
+  if (oscilator != 0)                                                     // If some value inputed to oscillator 
   {
-    ledcInit();                                                           // Reconfigura ledc
+    ledcInit();                                                           // reconfigure ledc function 
   }
 }
 #endif
