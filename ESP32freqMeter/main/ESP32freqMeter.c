@@ -8,52 +8,48 @@
 
    The project:
    A high accuracy frequency meter using ESP32, without scales and showing up to 8 digits,
-   measuring up to 20MHz or more. Very stable. 
+   measuring up to 20MHz or more. Very stable. You can test the frequency meter with internal oscillator. 
    This project can be compiled with the arduino IDE or the IDF!
 
   Definitions: 
 
   GPIO_34 =  Freq Meter Input
-  GPIO_25 = #define LEDC_HS_CH0_GPIO      GPIO_NUM_25
+  GPIO_25 =  Oscillator output - to test Frequency Meter 
 
-  #define PCNT_INPUT_CTRL_IO    GPIO_NUM_35                                 // Count Control GPIO HIGH=count up, LOW=count down GPIO 25
-  #define OUTPUT_CONTROL_GPIO   GPIO_NUM_32                                 // Saida do timer GPIO 2
+  GPIO_35 = Pulse Count control input - HIGH =count up, LOW=count down
+  GPIO_32 = High Precision Timer output (to control Pulse Counter) 
+  
+  Make connection between GPIO_35 to GPIO_32 to run Frequency Meter
+  If you need, can change GPIOs pins
+    
+  The frequency meter is divided into 5 parts:
+     1. Pulse counter;
+     2. Counting time control;
+     3. Printing the result;
+     4. Space for other functions.
+     5. Signal generator programmed for 2 Hz (or 50,000)
 
-  PORT de entrada do frequencímetro PCNT_INPUT_SIG_IO (GPIO 34)
-  PORT de entrada de controle PCNT_INPUT_CTRL_IO      (GPIO 35)
-  PORT de saída do timer OUTPUT_CONTROL_GPIO          (GPIO 32)
-  O PORT de entrada de controle (GPIO 35) deve ser ligado ao PORT de saída do timer (GPIO 32).
-  Estes são os ports usados no projeto, mas podem ser modificados para sua melhor conveniência.
+ 1. The pulse counter uses the ESP32 pcnt.
+      Pcnt has the following parameters:
+       a. input port;
+       b. input channel;
+       c. control port;
+       d. count on Pulse raising;
+       e. count on Pulse falling;
+       f. counting only with Control - high level;
+       g. maximum count limit.
+       
+  2. Counting time control uses the high precision esp-timer:
+      The esp-timer has the following parameter:
+       a. time control;
 
-  O frequencímetro é dividido em 5 partes:
-    1. Contador de pulsos;
-    2. Controle de tempo de contagem;
-    3. Impressão do resultado;
-    4. Espaço para outras funções.
-    5. Gerador de sinais programado para 2  Hz  (ou 50.000)
-
-  1. O contador de pulso usa o pcnt do ESP32.
-     O pcnt tem os seguintes parâmetros:
-      a. port de entrada;
-      b. canal de entrada;
-      c. port de controle;
-      d. contagem na subida do pulso;
-      e. contagem na descida do pulso;
-      f. contagem só com o controle em nível elevado;
-      g. limite máximo de contagem.
-
-  2. O Controle de tempo de contagem usa o esp-timer.
-     O esp-timer tem o seguinte parâmetro:
-      a. controle do tempo;
-
-  5. Gerador de frequncias para testes usa o ledc
-     O ledc tem o seguinte parâmetro:
-      a. port de saida;
-      b. canal de lcd;
-      c. frequencia;
-      d. resolucao do ledc;
-      e. duty cycle em 5;
-
+   5. Frequency generator for tests, uses ledc peripheral:
+      The ledc has the following parameters:
+       a. output port;
+       B. lcd channel;
+       ç. frequency;
+       d. resolution of ledc;
+       e. duty cycle at 50%;
 
   Funcionamento:
     O port de controle de contagem em nível alto, libera o contador para contar os pulsos que chegam no port de entrada de pulsos.
@@ -84,11 +80,12 @@
   assim o LED piscara na frequencia de entrada.
 
   O compilador usa as diretivas de compilacaoo para selecionar:
-   Compilador Arduino ou IDF    automatico
-   Uso de LCD                   LCD_ON ou LCD_OFF
-   Uso de LCD I2C               LCD_I2C_ON ou LCD_I2C_OFF
+   With Arduino IDE
+   Using LCD:         LCD_ON or LCD_OFF
+   Using LCD I2C      LCD_I2C_ON ou LCD_I2C_OFF
 
-  Referências:
+ References: 
+ 
   author=krzychb https://github.com/espressif/esp-idf/tree/master/examples/peripherals/pcnt
   resposta by Deouss » Thu May 17, 2018 3:07 pm no tópico https://esp32.com/viewtopic.php?t=5734
   Gerador de sinais Gustavo https://github.com/Gustavomurta/ESP32_frequenceMeter/blob/master/ESP32OscilatorV03.ino
