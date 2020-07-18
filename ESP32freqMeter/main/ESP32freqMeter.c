@@ -1,61 +1,20 @@
-// Atual ESP32_FreqMeter_0.33.0.ino    Antigo NovoTeste08.ino  
+// ESP32 HIGH ACCURACY FREQUENCY METER version 0.33.0
 
-// V01 Teste com pcnt
-// V02 teste com timer
-// V03 Teste de interrupt
-// V04 Definicao com escala baseada no prescaler
-// V05 Calculos com interrupt
-// V06 Versão inicial do frequeciimetro com ESP32 nao esta preciso , Seleciona a escala.
-// V07 Modificacoes no loop pra melhorar a escala  funcionou bem
-// V07_A Fixando o valor de prescaler em 80   Criada 5a escala
-// V07_B teste de erro na rotina pcnt
-// V08 Sem escala, fixando o prescaler e o timer e contando os overflows
-// V09 Limpando a V08
-// V10 Testes com rotina de contagem de overflow
-// V11 Teste de overflow de pcnt e timer  funciona  teste com frequenci DE 10 khZ  Copia do frequencimetro 2 modificado
-// V12 Resumir e limpar V11  enroscou a partir de 300 KHz
-// V13 Consegui bom resultado deste aqui até 20MHz Usando RMT com referencia de tempo
-// V14 Interrupt de pcnt e contar tempo de RMT
-// V15 Novo teste com RMT
-// V16 Qtde de pulsos entre ocorrencias de interrupt
-// V17 Outro teste de ocorrencias de interrupt
-// V18 Teste com rotina de interrupt com poucas funcoes
-// V19 Teste com esp-timer  e interrupt no fim do pulso do esp-timer
-// V20 Teste = V19
-// V20a Preparada para IDF
-// V20aGustavo Sem interrupt de esp-timer
-// V21 Inclusao de LCD com diretivas de compilacao
-// 0.0.21 = V21
-// 0.0.22  Pontuação do numero
-// V23 Teste com 2 rotinas de pontuacao
-// V24 Parametros de ledc calculados   Diretivas de compilacao para ARDUINO e IDF
-// V25 Nova rotina de pontuação
-// V26 Usando printf na rotina de pontuacao
-// V27 Teste com IDF  Compilou com a IDF do CEI
-// V28 Teste com nova rotina de pontuacao e printf
-// V30 Rotina de teste depois de erro no IDF e limpeza de variaveis desnecessarias e organização
-// V31 Nova Diretiva de compilação  ARDUINO   Inclusão de LCD  ok
-// V32 Novamente com rotinas de LCD Mudanca do formato dos port GPIO
+/* DEVELOPER : Rui Viana
+   CONTRIBUITOR: Gustavo Murta   
+   DATE: 17/jul/2020
+   
+   ESP32 Dev Kit - ESP-IDF V4.01 or ARDUINO IDE 1.8.12
 
-// V33 Calculo de Resolucao com base na frequencia e duty de 50%, inclusao de LCD I2C com diretiva e teste gpio matrix incluido
+   The project:
+   A high accuracy frequency meter using ESP32, without scales and showing up to 8 digits,
+   measuring up to 20MHz or more. Very stable. 
+   This project can be compiled with the arduino IDE or the IDF!
 
+  Definitions: 
 
-/*
-
-  Desenvolvedores: Rui Viana e Gustavo Murta   08/jul/2020
-
-  Para desenvolver este projeto, foram aproveitadas partes de códigos dos desenvolvedores
-  abaixo referenciados.
-
-  O Projeto:
-  Um frequencímetro usando ESP32, sem necessidade de escalas e mostrando até 8 dígitos,
-  medindo com precisão até 20MHz ou mais.
-  Este projeto pode ser compilado com a IDE do arduino ou com o IDF
-
-  Definições:
-
-  #define PCNT_INPUT_SIG_IO     GPIO_NUM_34                                 // Freq Meter Input GPIO 34
-  #define LEDC_HS_CH0_GPIO      GPIO_NUM_25
+  GPIO_34 =  Freq Meter Input
+  GPIO_25 = #define LEDC_HS_CH0_GPIO      GPIO_NUM_25
 
   #define PCNT_INPUT_CTRL_IO    GPIO_NUM_35                                 // Count Control GPIO HIGH=count up, LOW=count down GPIO 25
   #define OUTPUT_CONTROL_GPIO   GPIO_NUM_32                                 // Saida do timer GPIO 2
