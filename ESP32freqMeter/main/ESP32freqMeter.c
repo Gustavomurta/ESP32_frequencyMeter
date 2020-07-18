@@ -13,7 +13,7 @@
 
    The project:
    A high accuracy frequency meter using ESP32, without scales and showing up to 8 digits,
-   measuring up to 20 MHz or more. Very stable. You can test the frequency meter with internal oscillator.    
+   measuring up to 20 MHz or more. Very stable. Optionally, you can test the frequency meter with internal oscillator.    
    Caution = input signal to Freq Meter - only 3.3 Volts! If you want 5 Volts, use level converter. 
 
   Definitions: 
