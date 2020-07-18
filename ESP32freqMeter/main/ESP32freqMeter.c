@@ -90,8 +90,8 @@
    Using LCD I2C =   LCD_I2C_ON or LCD_I2C_OFF
    
    Calculation of adjustments for each frequency range:
-   Resolution = log2(Clock(80MHz)/f) + 1   ex: 50.000 HZ = 80.0000/50.000 = 1.600 log2(1600) = 10 + 1 = 11
-   Duty cycle 50%  = (2**Resolucao)/2       ex: 2**11 = 2048   2048/2 = 1024
+   Resolution = log2(Clock(80 MHz)/f) + 1    ex: 50,000 Hz = 80,0000/50,000 = 1,600 log2(1600) = 10 + 1 = 11
+   Duty cycle 50%  = (2**Resolution)/2       ex: 2**11 = 2048   2048/2 = 1024
 
    References: 
  
@@ -104,8 +104,8 @@
   https://arduino.stackexchange.com/questions/28603/the-most-effective-way-to-format-numbers-on-arduino
 */
 
-#define LCD_OFF                                                           // Define LCD_ON, para usar LCD, se não, defina LCD_OFF
-#define LCD_I2C_OFF                                                       // Define LCD_I2C_ON, para usar LCD I2C, se não, defina LCD_I2C_OFF
+#define LCD_OFF                                                           // To use LCD, set LCD_ON 
+#define LCD_I2C_OFF                                                       // To use I2C LCD, set LCD_I2C_ON
 
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
