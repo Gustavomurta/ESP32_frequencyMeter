@@ -125,14 +125,14 @@
 #include "sdkconfig.h"
 #include "math.h"
 
-#ifdef LCD_ON                                                             // Se tem LCD
+#ifdef LCD_ON                                                             // If using LCD 
 
-#ifdef LCD_I2C_ON                                                         // Se tem LCD I2C
-#include <LiquidCrystal_I2C.h>                                            // Inclue a bibliotea do LCD I2C
-LiquidCrystal_I2C lcd(0x3F, 16, 2);                                       // Instancia e define I2C addr
+#ifdef LCD_I2C_ON                                                         // If using I2C LCD 
+#include <LiquidCrystal_I2C.h>                                            // LCD I2C Library 
+LiquidCrystal_I2C lcd(0x3F, 16, 2);                                       // Define I2C address, columns and rows. Use I2C scanner to identify address
 #else
-#include <LiquidCrystal.h>                                                // Inclue a bibliotea do LCD
-LiquidCrystal lcd(5, 18, 19, 21, 22, 23);                                 // Instancia e define port
+#include <LiquidCrystal.h>                                                // LCD Library 
+LiquidCrystal lcd(5, 18, 19, 21, 22, 23);                                 // Define LCD pins at parallel interface
 #endif
 
 #endif
@@ -148,19 +148,19 @@ LiquidCrystal lcd(5, 18, 19, 21, 22, 23);                                 // Ins
 #define LEDC_HS_MODE          LEDC_HIGH_SPEED_MODE                        // LEDC em high speed
 #define LEDC_HS_TIMER         LEDC_TIMER_0                                // Usar timer0 do ledc
 
-uint32_t         overflow  =  20000;                                      // Valor maximo para overflow de pcnt
-#define PCNT_H_LIM_VAL        overflow                                    // Limite superior de contagem
+uint32_t         overflow  =  20000;                                      // Max Pulse Counter value
+#define PCNT_H_LIM_VAL        overflow                                    // High Limit value of Pulse Counter 
 
 esp_timer_create_args_t create_args;                                      // Argumentos do esp-timer
 esp_timer_handle_t timer_handle;                                          // Instancia de esp-timer
 
-bool            flag          = true;                                     // Indicador de fim de contagem libera impressao
-int16_t         pulses        = 0;                                        // Contador de pulsos de entrada
-uint32_t        multPulses    = 0;                                        // Contador de overflows de pcnt
-uint32_t        janela        = 1000000;                                  // Janela de 1 segundo para a contagem de pulsos
-uint32_t        oscilator     = 2;                                        // Frequencia em Hz
-uint32_t        mDuty         = 0;                                        // Valor calculado do duty
-uint32_t        resolucao     = 0;                                        // Valor calculado da resolucao
+bool            flag          = true;                                     // Flag to print frequency reading
+int16_t         pulses        = 0;                                        // Pulse Counter value 
+uint32_t        multPulses    = 0;                                        // Overflows count value 
+uint32_t        janela        = 1000000;                                  // Sampling time of one second 
+uint32_t        oscilator     = 2;                                        // Oscillator frequency - initial 
+uint32_t        mDuty         = 0;                                        // Duty value 
+uint32_t        resolucao     = 0;                                        // Resolution value 
 
 portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;                     // variavel tipo portMUX_TYPE para sincronismo
 
