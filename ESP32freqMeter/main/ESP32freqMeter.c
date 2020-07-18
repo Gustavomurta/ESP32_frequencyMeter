@@ -18,12 +18,12 @@
 
   GPIO_34 =  Freq Meter Input
   GPIO_25 =  Oscillator output - to test Frequency Meter 
+  To test freq Meter with internal oscillator, make connection between GIPO_34 and GPIO_25 (optional).
 
   GPIO_35 = Pulse Count control input - HIGH =count up, LOW=count down
-  GPIO_32 = High Precision Timer output (to control Pulse Counter) 
+  GPIO_32 = High Precision Timer output (to control Pulse Counter)   
+  Make connection between GPIO_35 to GPIO_32 to use Frequency Meter (must have). 
   
-  Make connection between GPIO_35 to GPIO_32 to run Frequency Meter (must have). 
-  To test freq Meter with internal oscillator, make connection between GIPO_25 and GPIO_34 (optional).
   If you need, can change GPIOs pins
     
   The frequency meter is divided into 5 parts:
