@@ -1,7 +1,7 @@
 // ESP32 HIGH ACCURACY FREQUENCY METER version 0.33.0
 
 /* DEVELOPER : Rui Viana
-   CONTRIBUITOR: Gustavo Murta   
+   CONTRIBUITORS: Gustavo Murta / Celso Ito
    DATE: 17/jul/2020
    
    ESP32 Dev Kit - ESP-IDF V4.01 or ARDUINO IDE 1.8.12
@@ -50,6 +50,36 @@
        ç. frequency;
        d. resolution of ledc;
        e. duty cycle at 50%;
+       
+  Operation:
+    The high level count control port releases the counter to count the pulses that arrive at the pulse input port.
+  Pulses are counted both as the pulse rises and falls, to improve the counting average.
+  The counting time is defined by the esp-timer, and it is defined in 1 second, in the window variable.
+  If the count is greater than 20000 pulses during the counting time, overflow occurs and with each overflow that occurs
+  and 'counted in the multPulses variable, and the pulse counter returns to zero continuing to count.
+    When the reading time ends, a routine is called and the value in the pulse counter is' read and saved,
+    a flag e 'on indicating that the pulse reading has ended
+
+    In the loop, when verifying that the flag indicates that the pulse reading has finished, the value is calculated by multiplying
+  the number of overflow by 20000 and adding to the number of remaining pulses and dividing by 2, because it counted 2 times.
+  As the pulses are counted on the way up and down, the count is double the frequency.
+    In the frequency, points are inserted and printed on the serial monitor.
+  The registers are reset and the input control port is raised to a high level again and the
+  pulses starts.
+
+  It also has a signal generator that generates 50,000 Hz, and can be used for testing.
+  This generator can be changed to generate frequencies up to 40 MHz.
+  We use the led32 feature of ESP32 to generate frequency that can be used as a test.
+    The base frequency value is 2 (or 50,000) Hz, but it can be typed or another value on the serial monitor
+    The duty was set at 50%
+    The resolution is calculated.
+  The output port of this generator is defined in the #define LEDC_GPIO line.
+  It is currently defined as GPIO 25.
+
+  Internally using GPIO matrix, the input pulse was directed to the ESP32 native LED,
+  so the LED will flash at the input frequency.
+  
+  
 
   Funcionamento:
     O port de controle de contagem em nível alto, libera o contador para contar os pulsos que chegam no port de entrada de pulsos.
@@ -79,20 +109,18 @@
   Internamente usando GPIO matrix,o pulso de entrada foi direcionado para o LED nativo do ESP32, 
   assim o LED piscara na frequencia de entrada.
 
-  O compilador usa as diretivas de compilacaoo para selecionar:
-   With Arduino IDE
+ The compiler uses the compilation directives to select:   
    Using LCD:         LCD_ON or LCD_OFF
    Using LCD I2C      LCD_I2C_ON ou LCD_I2C_OFF
 
  References: 
  
-  author=krzychb https://github.com/espressif/esp-idf/tree/master/examples/peripherals/pcnt
-  resposta by Deouss » Thu May 17, 2018 3:07 pm no tópico https://esp32.com/viewtopic.php?t=5734
-  Gerador de sinais Gustavo https://github.com/Gustavomurta/ESP32_frequenceMeter/blob/master/ESP32OscilatorV03.ino
-  Formatação de numero https://arduino.stackexchange.com/questions/28603/the-most-effective-way-to-format-numbers-on-arduino
+  https://github.com/espressif/esp-idf/tree/master/examples/peripherals/pcnt
+  Answer of Deouss » Thu May 17, 2018 3:07 pm no tópico https://esp32.com/viewtopic.php?t=5734
+  ESP323 Oscillator https://github.com/Gustavomurta/ESP32_frequenceMeter/blob/master/ESP32OscilatorV03.ino
+  Formatting numbers  https://arduino.stackexchange.com/questions/28603/the-most-effective-way-to-format-numbers-on-arduino
   https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/esp_timer.html
   https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/pcnt.html
-  Agradecemos muito também ao CELSO ITO pelas sugestões e pelos incansáveis teste com IDF.
 */
 
 #define LCD_OFF                                                           // Define LCD_ON, para usar LCD, se não, defina LCD_OFF
