@@ -96,7 +96,7 @@
    Duty cycle 50%  = (2**Resolution)/2       ex: 2**11 = 2048   2048/2 = 1024
 
    References: 
- 
+   
   https://github.com/espressif/esp-idf/tree/master/examples/peripherals/pcnt
   https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/pcnt.html
   https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/esp_timer.html
