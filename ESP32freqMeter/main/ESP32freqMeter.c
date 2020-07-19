@@ -206,7 +206,7 @@ void ledcInit ()                                                          // Opt
 
   ledc_timer_config_t ledc_timer = {};                                    // LEDC timer config instance 
 
-  ledc_timer.duty_resolution = (ledc_timer_bit_t) + resolucao;            // Set resolution
+  ledc_timer.duty_resolution = ledc_timer_bit_t (resolucao);              // Set resolution
   ledc_timer.freq_hz    = osc_freq;                                       // Set Oscillator frequency
   ledc_timer.speed_mode = LEDC_HIGH_SPEED_MODE;                           // Set high speed mode 
   ledc_timer.timer_num = LEDC_TIMER_0;                                    // Set LEDC timer index
