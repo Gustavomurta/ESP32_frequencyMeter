@@ -24,7 +24,7 @@
   Change frequency, inputting value at console (1 Hz to 40 Mhz)
 
   GPIO_35 = Pulse Counter control input - HIGH =count up, LOW=count down
-  GPIO_32 = High Precision Timer output (to control Pulse Counter)   
+  GPIO_32 = High Resolution Timer output (to control Pulse Counter)   
   Make connection between GPIO_35 to GPIO_32 to use Frequency Meter (must have). 
   
   If you need, can change GPIOs pins
@@ -46,7 +46,7 @@
        f. counting only with Control - high level;
        g. maximum count limit.
        
-  2. Counting time control uses the high precision esp-timer:
+  2. Counting time control uses the high resolution esp-timer:
       The esp-timer has the following parameter:
        a. time control;
 
@@ -62,7 +62,7 @@
   
   The high level of control port enable the counter to count the pulses that arrive at the input port.
   Pulses are counted both as the pulse rising and falling, to improve the counting average.
-  The sampling time is defined by the high precision esp-timer, and it is defined in 1 second, in the window variable.
+  The sampling time is defined by the high resolution esp-timer, and it is defined in 1 second, in the window variable.
   If the count is greater than 20000 pulses during the counting time, overflow occurs and with each overflow that occurs
   is counted in the multPulses variable and then pulse counter is cleared and proceed to counting.
   Unfortunately the Pulse Counter has only 16 bits that may be used. 
@@ -290,32 +290,32 @@ void myInit()
 }
 
 //---------------------------------------------------------------------------------
-void app_main(void)
-{
-#ifndef ARDUINO                                                           // IDF
+void app_main(void)                                                       // main application 
+{   
+ #ifndef ARDUINO                                                          // IDF
   myInit();                                                               // IDF
   while (1)                                                               // IDF
   {
 #endif
-    if (flag == true)                                                     // Se a contagem tiver terminado
+    if (flag == true)                                                     // If count was ended
     {
-      flag = false;                                                       // Impede nova impresao
-      float frequencia = 0;                                               // Variavel para calculo de frequencia
-      frequencia = (pulses + (multPulses * overflow)) / 2  ;              // Calcula qtos pulsos ocorreram
-      char buf[32];                                                       // Buffer para guardar a pontuacao
-      printf("frequencia: %s", (ltos(frequencia, buf, 10)));              // Imprime pontuado
-      printf(" Hz \n");                                                   // Sufixo
+      flag = false;                                                       // change flag to disable print
+      float frequency = 0;                                                // Clear variable frequency
+      frequency = (pulses + (multPulses * overflow)) / 2  ;               // Calculation of frequency 
+      char buf[32];                                                       // Create buffer
+      printf("Frequency: %s", (ltos(frequencia, buf, 10)));               // Print frequency 
+      printf(" Hz \n");                                                   // Print unit 
 #ifdef LCD_ON                                                             // LCD
-      lcd.setCursor(2, 1);                                                // Posiciona cusros na posicao 3 da linha 2
-      lcd.print((ltos(frequencia, buf, 10)));                             // Print
-      lcd.print(" Hz              ");                                     // Sufixo
+      lcd.setCursor(2, 1);                                                // Set cursor position - column and row
+      lcd.print((ltos(frequency, buf, 10)));                              // Print frequency 
+      lcd.print(" Hz              ");                                     // Print unit
 #endif
-      multPulses = 0;                                                     // Zera contador de overflow
-      // Aqui pode rodar qq funcao                                        // Espaco para qualquer função
-      vTaskDelay(1);
-      // Aqui pode rodar qq funcao                                        // Espaco para qualquer função
-      pcnt_counter_clear(PCNT_COUNT_UNIT);                                // Zera o contador PCNT
-      esp_timer_start_once(timer_handle, janela);                         // Inicia contador de tempo de 1 segundo
+      multPulses = 0;                                                     // Clear overflow counter
+      // Put your function here, if you want                                     
+      vTaskDelay(1);                                                      // delay 1 milisecond
+      // Put your function here, if you want                                       
+      pcnt_counter_clear(PCNT_COUNT_UNIT);                                // Clear Pulse Counter 
+      esp_timer_start_once(timer_handle, janela);                         // Initialize High resolution timer (1 sec) 
       gpio_set_level(OUTPUT_CONTROL_GPIO, 1);                             // Porta de controle habilita contagem dos pulsos
     }
 #ifndef ARDUINO                                                           // IDF
