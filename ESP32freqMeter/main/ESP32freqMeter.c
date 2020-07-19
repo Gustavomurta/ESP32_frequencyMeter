@@ -225,18 +225,18 @@ void ledcInit ()                                                          // Opt
 }
 
 //----------------------------------------------------------------------------------
-void tempo_controle(void *p)                                              // Fim de tempo de leitura de pulsos
+void read_PCNT(void *p)                                                   // Read Pulse Counter 
 {
-  gpio_set_level(OUTPUT_CONTROL_GPIO, 0);                                 // Controle do PCount - stop count
-  pcnt_get_counter_value(PCNT_COUNT_UNIT, &pulses);                       // Obtem o valor contado
-  flag = true;                                                            // Informa que ocorreu interrupt de controle
+  gpio_set_level(OUTPUT_CONTROL_GPIO, 0);                                 // Stop counter - output control LOW
+  pcnt_get_counter_value(PCNT_COUNT_UNIT, &pulses);                       // Read Pulse Counter value 
+  flag = true;                                                            // Change flag to enable print 
 }
 
 //----------------------------------------------------------------------------------
 static void IRAM_ATTR pcnt_intr_handler(void *arg)                        // Counting overflow pulses 
 {
   portENTER_CRITICAL_ISR(&timerMux);                                      // disabling the interrupts
-  multPulses++;                                                           // add Overflow counter 
+  multPulses++;                                                           // increment Overflow counter 
   PCNT.int_clr.val = BIT(PCNT_COUNT_UNIT);                                // Clear Pulse Counter interrupt bit 
   portEXIT_CRITICAL_ISR(&timerMux);                                       // enabling the interrupts
 }
@@ -270,23 +270,23 @@ void pcnt_init(void)                                                      // Rot
 //----------------------------------------------------------------------------------
 void myInit()
 {
-#ifdef LCD_ON                                                             // Se tem LCD
-  lcd.begin(16, 2);                                                       // Inicializa lcd
-  lcd.print("Frequencimetro");                                            // Print
+#ifdef LCD_ON                                                             // If using LCD
+  lcd.begin(16, 2);                                                       // LCD init 
+  lcd.print("Frequency Meter");                                           // Print
 #endif
 
-  ledcInit();                                                             // Inicializa o ledc
-  pcnt_init();                                                            // Inicializa o pulse count
-  gpio_pad_select_gpio(OUTPUT_CONTROL_GPIO);                              // Define o port decontrole
-  gpio_set_direction(OUTPUT_CONTROL_GPIO, GPIO_MODE_OUTPUT);              // Define o port de controle como saida
+  ledcInit();                                                             // Init LEDC peripheral 
+  pcnt_init();                                                            // Init Pulse Counter peripheral 
+  gpio_pad_select_gpio(OUTPUT_CONTROL_GPIO);                              // Set GPIO pad
+  gpio_set_direction(OUTPUT_CONTROL_GPIO, GPIO_MODE_OUTPUT);              // Set GPIO direction 
 
-  create_args.callback = tempo_controle;                                  // Instancia o tempo de controle
-  esp_timer_create(&create_args, &timer_handle);                          // Cria parametros do timer
+  create_args.callback = read_PCNT;                                       // Set esp-timer argument 
+  esp_timer_create(&create_args, &timer_handle);                          // Create esp-timer instance 
 
-  gpio_set_direction(IN_BOARD_LED, GPIO_MODE_OUTPUT);                     // Port LED como saida
+  gpio_set_direction(IN_BOARD_LED, GPIO_MODE_OUTPUT);                     // Set LED inboard as output 
 
-  gpio_matrix_in(PCNT_INPUT_SIG_IO, SIG_IN_FUNC226_IDX, false);           // Direciona a entrada de pulsos
-  gpio_matrix_out(IN_BOARD_LED, SIG_IN_FUNC226_IDX, false, false);        // Para o LED do ESP32
+  gpio_matrix_in(PCNT_INPUT_SIG_IO, SIG_IN_FUNC226_IDX, false);           // Set GPIO matrin IN - Freq Meter input 
+  gpio_matrix_out(IN_BOARD_LED, SIG_IN_FUNC226_IDX, false, false);        // Set GPIO matrix OUT - to inboard LED 
 }
 
 //---------------------------------------------------------------------------------
@@ -297,13 +297,13 @@ void app_main(void)                                                       // mai
   while (1)                                                               // IDF
   {
 #endif
-    if (flag == true)                                                     // If count was ended
+    if (flag == true)                                                     // If count has ended
     {
       flag = false;                                                       // change flag to disable print
       float frequency = 0;                                                // Clear variable frequency
       frequency = (pulses + (multPulses * overflow)) / 2  ;               // Calculation of frequency 
       char buf[32];                                                       // Create buffer
-      printf("Frequency: %s", (ltos(frequencia, buf, 10)));               // Print frequency 
+      printf("Frequency: %s", (ltos(frequency, buf, 10)));                // Print frequency 
       printf(" Hz \n");                                                   // Print unit 
 #ifdef LCD_ON                                                             // LCD
       lcd.setCursor(2, 1);                                                // Set cursor position - column and row
