@@ -158,7 +158,7 @@ bool            flag          = true;                                     // Fla
 int16_t         pulses        = 0;                                        // Pulse Counter value 
 uint32_t        multPulses    = 0;                                        // Overflows count value 
 uint32_t        janela        = 1000000;                                  // Sampling time of one second 
-uint32_t        oscilator     = 2;                                        // Oscillator frequency - initial 
+uint32_t        osc_freq      = 2;                                        // Oscillator frequency - initial 
 uint32_t        mDuty         = 0;                                        // Duty value 
 uint32_t        resolucao     = 0;                                        // Resolution value 
 
@@ -197,29 +197,29 @@ char *ltos(long val, char *s, int radix)
 //----------------------------------------------------------------------------
 void ledcInit ()                                                          // Optional Pulse Oscillator to test Freq Meter 
 {
-  resolucao = log((80000000 / oscilator) + 1);                            // Resolution calc of oscillator
+  resolucao = log((80000000 / osc_freq) + 1);                             // Resolution calc of oscillator
   //  Serial.println(resolucao);
-  mDuty = (pow(2, resolucao)) / 2;                                        // Duty Cycle calc of oscillator 
+  mDuty = (pow(2, resolucao)) / 2;                                        // Calc of Duty Cycle 50% - oscillator 
   //  Serial.println(mDuty);
 
   ledc_timer_config_t ledc_timer = {};                                    // LEDC timer config instance 
 
   ledc_timer.duty_resolution = (ledc_timer_bit_t) + resolucao;            // Set resolution
-  ledc_timer.freq_hz    = oscilator;                                      // Frequencia de oscilacao
-  ledc_timer.speed_mode = LEDC_HIGH_SPEED_MODE;                           // Mode de operacao em high speed
-  ledc_timer.timer_num = LEDC_TIMER_0;                                    // Usar timer0 do ledc
-  ledc_timer_config(&ledc_timer);                                         // Configurar o timer do ledc
+  ledc_timer.freq_hz    = osc_freq;                                       // Set Oscillator frequency
+  ledc_timer.speed_mode = LEDC_HIGH_SPEED_MODE;                           // Set high speed mode 
+  ledc_timer.timer_num = LEDC_TIMER_0;                                    // Set LEDC timer index
+  ledc_timer_config(&ledc_timer);                                         // Set LEDC Timer 
 
   ledc_channel_config_t ledc_channel = {};                                // LEDC Channel config instance 
 
   ledc_channel.channel    = LEDC_HS_CH0_CHANNEL;                          // Set HS Channel - 0 
-  ledc_channel.duty       = mDuty;                                        // Set Duty Cycle - 0 to (2**duty_resolution)
+  ledc_channel.duty       = mDuty;                                        // Set Duty Cycle 50%
   ledc_channel.gpio_num   = LEDC_HS_CH0_GPIO;                             // LEDC output gpio
   ledc_channel.intr_type  = LEDC_INTR_DISABLE;                            // LEDC Fade interrupt disable
   ledc_channel.speed_mode = LEDC_HIGH_SPEED_MODE;                         // Set LEDC high speed mode
   ledc_channel.timer_sel  = LEDC_TIMER_0;                                 // Set timer source of channel - 0
 
-  ledc_channel_config(&ledc_channel);                                     // Configurar o canal do ledc
+  ledc_channel_config(&ledc_channel);                                     // Config LEDC channel 
 }
 
 //----------------------------------------------------------------------------------
@@ -334,18 +334,18 @@ void loop()
 {
   app_main();                                                             // main application
   String inputString = "";                                                // clear temporary string
-  oscilator = 0;                                                          // clear oscillator value 
+  osc_freq = 0;                                                           // clear oscillator value 
   while (Serial.available())                                              
   {
     char inChar = (char)Serial.read();                                    // Reads a byte on the console
     inputString += inChar;                                                // Add char to string 
     if (inChar == '\n')                                                   // If new line (enter)
     {
-      oscilator = inputString.toInt();                                    // Converts String into integer value 
+      osc_freq = inputString.toInt();                                     // Converts String into integer value 
       inputString = "";                                                   // Clear string
     }
   }
-  if (oscilator != 0)                                                     // If some value inputted to oscillator 
+  if (osc_freq != 0)                                                      // If some value inputted to oscillator frequency 
   {
     ledcInit();                                                           // reconfigure ledc function 
   }
