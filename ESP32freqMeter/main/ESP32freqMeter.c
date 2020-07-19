@@ -93,8 +93,8 @@
    Using LCD I2C =   LCD_I2C_ON or LCD_I2C_OFF
    
    Calculation of adjustments for each frequency range:
-   Resolution = log2(Clock(80 MHz)/f) + 1    ex: 50,000 Hz = 80,0000/50,000 = 1,600 log2(1600) = 10 + 1 = 11
-   Duty cycle 50%  = (2**Resolution)/2       ex: 2**11 = 2048   2048/2 = 1024
+   Resolution = log2(Clock(80 MHz)/osc_freq) ex: 50,000 Hz = 80,0000/50,000 = 1,600    log2(1600) = 10.64
+   Duty cycle 50%  = (2**Resolution)/2       ex: 2**10 = 1024   1024/2 = 512
 
    References: 
    
