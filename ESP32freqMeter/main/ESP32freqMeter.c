@@ -21,6 +21,7 @@
   GPIO_34 =  Freq Meter Input
   GPIO_25 =  Oscillator output - to test Frequency Meter 
   To test freq Meter with internal oscillator, make connection between GIPO_34 and GPIO_25 (optional).
+  Change frequency, inputting value at console (1 Hz to 40 Mhz)
 
   GPIO_35 = Pulse Counter control input - HIGH =count up, LOW=count down
   GPIO_32 = High Precision Timer output (to control Pulse Counter)   
@@ -158,7 +159,7 @@ bool            flag          = true;                                     // Fla
 int16_t         pulses        = 0;                                        // Pulse Counter value 
 uint32_t        multPulses    = 0;                                        // Overflows count value 
 uint32_t        janela        = 1000000;                                  // Sampling time of one second 
-uint32_t        osc_freq      = 2;                                        // Oscillator frequency - initial 
+uint32_t        osc_freq      = 1000;                                     // Oscillator frequency - initial 1000 Hz (1 Hz to 40 Mhz) 
 uint32_t        mDuty         = 0;                                        // Duty value 
 uint32_t        resolucao     = 0;                                        // Resolution value 
 
