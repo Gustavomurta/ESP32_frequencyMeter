@@ -197,7 +197,7 @@ char *ltos(long val, char *s, int radix)
 //----------------------------------------------------------------------------
 void ledcInit ()                                                          // Optional Pulse Oscillator to test Freq Meter 
 {
-  resolucao = log((80000000 / osc_freq) + 1);                             // Resolution calc of oscillator
+  resolucao = log(80000000 / osc_freq) / log(2);                          // Calc of resolution 
   //  Serial.println(resolucao);
   mDuty = (pow(2, resolucao)) / 2;                                        // Calc of Duty Cycle 50% - oscillator 
   //  Serial.println(mDuty);
