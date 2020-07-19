@@ -22,7 +22,7 @@
   GPIO_25 =  Oscillator output - to test Frequency Meter 
   To test freq Meter with internal oscillator, make connection between GIPO_34 and GPIO_25 (optional).
 
-  GPIO_35 = Pulse Count control input - HIGH =count up, LOW=count down
+  GPIO_35 = Pulse Counter control input - HIGH =count up, LOW=count down
   GPIO_32 = High Precision Timer output (to control Pulse Counter)   
   Make connection between GPIO_35 to GPIO_32 to use Frequency Meter (must have). 
   
@@ -100,6 +100,7 @@
   https://github.com/espressif/esp-idf/tree/master/examples/peripherals/pcnt
   https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/pcnt.html
   https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/esp_timer.html
+  https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/ledc.html
   ESP332 Oscillator https://github.com/Gustavomurta/ESP32_frequenceMeter/blob/master/ESP32OscilatorV03.ino  
   Answer of Deouss » Thu May 17, 2018 3:07 pm no tópico https://esp32.com/viewtopic.php?t=5734
   Formatting numbers  https://arduino.stackexchange.com/questions/28603/the-most-effective-way-to-format-numbers-on-arduino
@@ -136,24 +137,24 @@ LiquidCrystal lcd(5, 18, 19, 21, 22, 23);                                 // Def
 
 #endif
 
-#define PCNT_COUNT_UNIT       PCNT_UNIT_0                                 // Set Pulse Count Unit - 0 
-#define PCNT_COUNT_CHANNEL    PCNT_CHANNEL_0                              // Set Pulse Count channel - 0 
-#define PCNT_INPUT_SIG_IO     GPIO_NUM_34                                 // Set Pulse Count input - Freq Meter Input GPIO 34
-#define LEDC_HS_CH0_GPIO      GPIO_NUM_25                                 // Set LEDC HS_CH0 pin - Oscillator output GIPO 25 
-#define PCNT_INPUT_CTRL_IO    GPIO_NUM_35                                 // Set Pulse Count Control GPIO pin - HIGH = count up, LOW = count down 
+#define PCNT_COUNT_UNIT       PCNT_UNIT_0                                 // Set Pulse Counter Unit - 0 
+#define PCNT_COUNT_CHANNEL    PCNT_CHANNEL_0                              // Set Pulse Counter channel - 0 
+#define PCNT_INPUT_SIG_IO     GPIO_NUM_34                                 // Set Pulse Counter input - Freq Meter Input GPIO 34
+#define PCNT_INPUT_CTRL_IO    GPIO_NUM_35                                 // Set Pulse Counter Control GPIO pin - HIGH = count up, LOW = count down 
 #define OUTPUT_CONTROL_GPIO   GPIO_NUM_32                                 // Saida do timer GPIO 32 Controla a contagem
-#define IN_BOARD_LED          (gpio_num_t)2                               // LED nativo ESP32 GPIO 2
-#define LEDC_HS_CH0_CHANNEL   LEDC_CHANNEL_0                              // LEDC no canal 0
-#define LEDC_HS_MODE          LEDC_HIGH_SPEED_MODE                        // LEDC em high speed
-#define LEDC_HS_TIMER         LEDC_TIMER_0                                // Usar timer0 do ledc
+#define IN_BOARD_LED          (gpio_num_t)2                               // ESP32 LED - GPIO 2
+#define LEDC_HS_CH0_CHANNEL   LEDC_CHANNEL_0                              // Set LEDC high speed Channel - 0
+#define LEDC_HS_MODE          LEDC_HIGH_SPEED_MODE                        // Set High speed mode
+#define LEDC_HS_TIMER         LEDC_TIMER_0                                // Set LEDC HS Timer - 0
+#define LEDC_HS_CH0_GPIO      GPIO_NUM_25                                 // Set LEDC HS_CH0 output pin - Oscillator output GPIO 25 
 
 uint32_t         overflow  =  20000;                                      // Max Pulse Counter value
 #define PCNT_H_LIM_VAL        overflow                                    // High Limit value of Pulse Counter 
 
-esp_timer_create_args_t create_args;                                      // Argumentos do esp-timer
-esp_timer_handle_t timer_handle;                                          // Instancia de esp-timer
+esp_timer_create_args_t create_args;                                      // Create an esp_timer instance
+esp_timer_handle_t timer_handle;                                          // Create an single timer 
 
-bool            flag          = true;                                     // Flag to print frequency reading
+bool            flag          = true;                                     // Flag to enable print frequency reading
 int16_t         pulses        = 0;                                        // Pulse Counter value 
 uint32_t        multPulses    = 0;                                        // Overflows count value 
 uint32_t        janela        = 1000000;                                  // Sampling time of one second 
@@ -161,7 +162,7 @@ uint32_t        oscilator     = 2;                                        // Osc
 uint32_t        mDuty         = 0;                                        // Duty value 
 uint32_t        resolucao     = 0;                                        // Resolution value 
 
-portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;                     // variavel tipo portMUX_TYPE para sincronismo
+portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;                     // portMUX_TYPE to do synchronism 
 
 //----------------------------------------------------------------------------------------
 char *ultos_recursive(unsigned long val, char *s, unsigned radix, int pos)
@@ -196,27 +197,27 @@ char *ltos(long val, char *s, int radix)
 //----------------------------------------------------------------------------
 void ledcInit ()                                                          // Optional Pulse Oscillator to test Freq Meter 
 {
-  resolucao = log((80000000 / oscilator) + 1);                            // Calculo da resolucao para ledc
+  resolucao = log((80000000 / oscilator) + 1);                            // Resolution calc of oscillator
   //  Serial.println(resolucao);
-  mDuty = (pow(2, resolucao)) / 2;                                        // Calculo do duty para ledc
+  mDuty = (pow(2, resolucao)) / 2;                                        // Duty Cycle calc of oscillator 
   //  Serial.println(mDuty);
 
-  ledc_timer_config_t ledc_timer = {};                                    // Instancia a configuracao do timer do ledc
+  ledc_timer_config_t ledc_timer = {};                                    // LEDC timer config instance 
 
-  ledc_timer.duty_resolution = (ledc_timer_bit_t) + resolucao;            // Configura resolucao
+  ledc_timer.duty_resolution = (ledc_timer_bit_t) + resolucao;            // Set resolution
   ledc_timer.freq_hz    = oscilator;                                      // Frequencia de oscilacao
   ledc_timer.speed_mode = LEDC_HIGH_SPEED_MODE;                           // Mode de operacao em high speed
   ledc_timer.timer_num = LEDC_TIMER_0;                                    // Usar timer0 do ledc
   ledc_timer_config(&ledc_timer);                                         // Configurar o timer do ledc
 
-  ledc_channel_config_t ledc_channel = {};                                // Instancia a configuracao canal do ledc
+  ledc_channel_config_t ledc_channel = {};                                // LEDC Channel config instance 
 
-  ledc_channel.channel    = LEDC_HS_CH0_CHANNEL;                          // Configura canal0
-  ledc_channel.duty       = mDuty;                                        // Valor calculado do duty em %
-  ledc_channel.gpio_num   = LEDC_HS_CH0_GPIO;                             // Saida no GPIO defino no inicio
-  ledc_channel.intr_type  = LEDC_INTR_DISABLE;                            // Desabilita interrupt de ledc
-  ledc_channel.speed_mode = LEDC_HIGH_SPEED_MODE;                         // Mode de operacao do canal em high speed
-  ledc_channel.timer_sel  = LEDC_TIMER_0;                                 // Usar timer0 do ledc
+  ledc_channel.channel    = LEDC_HS_CH0_CHANNEL;                          // Set HS Channel - 0 
+  ledc_channel.duty       = mDuty;                                        // Set Duty Cycle - 0 to (2**duty_resolution)
+  ledc_channel.gpio_num   = LEDC_HS_CH0_GPIO;                             // LEDC output gpio
+  ledc_channel.intr_type  = LEDC_INTR_DISABLE;                            // LEDC Fade interrupt disable
+  ledc_channel.speed_mode = LEDC_HIGH_SPEED_MODE;                         // Set LEDC high speed mode
+  ledc_channel.timer_sel  = LEDC_TIMER_0;                                 // Set timer source of channel - 0
 
   ledc_channel_config(&ledc_channel);                                     // Configurar o canal do ledc
 }
@@ -230,12 +231,12 @@ void tempo_controle(void *p)                                              // Fim
 }
 
 //----------------------------------------------------------------------------------
-static void IRAM_ATTR pcnt_intr_handler(void *arg)                        // Overflow de contagem de pulsos
+static void IRAM_ATTR pcnt_intr_handler(void *arg)                        // Counting overflow pulses 
 {
-  portENTER_CRITICAL_ISR(&timerMux);                                      // Desabilita interrupção ?
-  multPulses++;                                                           // Incrementa contador de overflow
-  PCNT.int_clr.val = BIT(PCNT_COUNT_UNIT);                                // Limpa indicador de interrupt
-  portEXIT_CRITICAL_ISR(&timerMux);                                       // Libera novo interrupt
+  portENTER_CRITICAL_ISR(&timerMux);                                      // disabling the interrupts
+  multPulses++;                                                           // add Overflow counter 
+  PCNT.int_clr.val = BIT(PCNT_COUNT_UNIT);                                // Clear Pulse Counter interrupt bit 
+  portEXIT_CRITICAL_ISR(&timerMux);                                       // enabling the interrupts
 }
 
 //----------------------------------------------------------------------------------
