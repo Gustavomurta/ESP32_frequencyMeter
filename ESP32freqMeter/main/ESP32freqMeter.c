@@ -98,12 +98,11 @@
    References: 
  
   https://github.com/espressif/esp-idf/tree/master/examples/peripherals/pcnt
-  Answer of Deouss » Thu May 17, 2018 3:07 pm no tópico https://esp32.com/viewtopic.php?t=5734
-  ESP323 Oscillator https://github.com/Gustavomurta/ESP32_frequenceMeter/blob/master/ESP32OscilatorV03.ino
-  Formatting numbers  https://arduino.stackexchange.com/questions/28603/the-most-effective-way-to-format-numbers-on-arduino
-  https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/esp_timer.html
   https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/pcnt.html
-  https://arduino.stackexchange.com/questions/28603/the-most-effective-way-to-format-numbers-on-arduino
+  https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/esp_timer.html
+  ESP323 Oscillator https://github.com/Gustavomurta/ESP32_frequenceMeter/blob/master/ESP32OscilatorV03.ino  
+  Answer of Deouss » Thu May 17, 2018 3:07 pm no tópico https://esp32.com/viewtopic.php?t=5734
+  Formatting numbers  https://arduino.stackexchange.com/questions/28603/the-most-effective-way-to-format-numbers-on-arduino
 */
 
 #define LCD_OFF                                                           // To use LCD, set LCD_ON 
@@ -137,11 +136,11 @@ LiquidCrystal lcd(5, 18, 19, 21, 22, 23);                                 // Def
 
 #endif
 
-#define PCNT_COUNT_UNIT       PCNT_UNIT_0                                 // Unidade 0 do pcnt
-#define PCNT_COUNT_CHANNEL    PCNT_CHANNEL_0                              // Canal 0 do pcnt
-#define PCNT_INPUT_SIG_IO     GPIO_NUM_34                                 // Freq Meter Input GPIO 34
-#define LEDC_HS_CH0_GPIO      GPIO_NUM_25                                 // Saida do ledc gerador de pulsos
-#define PCNT_INPUT_CTRL_IO    GPIO_NUM_35                                 // Count Control GPIO HIGH = count up, LOW = count down 
+#define PCNT_COUNT_UNIT       PCNT_UNIT_0                                 // Set Pulse Count Unit - 0 
+#define PCNT_COUNT_CHANNEL    PCNT_CHANNEL_0                              // Set Pulse Count channel - 0 
+#define PCNT_INPUT_SIG_IO     GPIO_NUM_34                                 // Set Pulse Count input - Freq Meter Input GPIO 34
+#define LEDC_HS_CH0_GPIO      GPIO_NUM_25                                 // Set LEDC HS_CH0 pin - Oscillator output GIPO 25 
+#define PCNT_INPUT_CTRL_IO    GPIO_NUM_35                                 // Set Pulse Count Control GPIO pin - HIGH = count up, LOW = count down 
 #define OUTPUT_CONTROL_GPIO   GPIO_NUM_32                                 // Saida do timer GPIO 32 Controla a contagem
 #define IN_BOARD_LED          (gpio_num_t)2                               // LED nativo ESP32 GPIO 2
 #define LEDC_HS_CH0_CHANNEL   LEDC_CHANNEL_0                              // LEDC no canal 0
