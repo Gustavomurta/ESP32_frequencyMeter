@@ -304,7 +304,7 @@ void app_main(void)                                                       // mai
 #ifdef LCD_I2C_ON                                                         // LCD
       lcd.setCursor(0, 0);                                                // Set cursor position - column and row
       lcd.print("Frequency Meter");                                       // Print
-      lcd.setCursor(2, 1);                                                // Set cursor position - column and row
+      lcd.setCursor(1, 1);                                                // Set cursor position - column and row
       lcd.print((ltos(frequency, buf, 10)));                              // Print frequency
       lcd.print(" Hz              ");                                     // Print unit
 #endif
