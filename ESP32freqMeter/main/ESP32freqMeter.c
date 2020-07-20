@@ -6,6 +6,7 @@
 
   ESP32 Dev Kit - ESP-IDF V4.0.1 or ARDUINO IDE 1.8.12
   This project can be compiled with the arduino IDE or the IDF! (change the extension to .INO to compile Arduino)
+  https://github.com/Gustavomurta/ESP32_frequenceMeter/blob/master/ESP32freqMeter/main/ESP32freqMeter.c
 
   Optional = Parallel LCD or I2C LCD (see pins connections in the program)
 
