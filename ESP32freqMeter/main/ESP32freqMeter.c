@@ -9,8 +9,6 @@
 
   Optional = Parallel LCD or I2C LCD (see pins connections in the program)
 
-  Comments, doubts, suggestions = jgustavoam@gmail.com
-
   The project:
   A high accuracy frequency meter using ESP32, without scales and showing up to 8 digits,
   measuring up to 40 MHz. Very stable. Optionally, you can test the frequency meter with internal oscillator.
@@ -62,9 +60,9 @@
 
   The high level of control port enable the counter to count the pulses that arrive at the input port.
   Pulses are counted both as the pulse rising and falling, to improve the counting average.
-  The sampling time is defined by the high resolution esp-timer, and it is defined in 1 second, in the window variable.
-  If the count is greater than 20000 pulses during the counting time, overflow occurs and with each overflow that occurs
-  is counted in the multPulses variable and then pulse counter is cleared and proceed to counting.
+  The sampling time is defined by the high resolution esp-timer, and it is defined in 1 second, in the sample-time variable.
+  If the count is greater than 20000 pulses during the counting time, overflow occurs and for with each overflow that occurs
+  the multPulses variable is incremented. Then pulse counter is cleared and proceed to counting.
   Unfortunately the Pulse Counter has only 16 bits that may be used.
 
   When the sampling time ends, a routine is called and the value in the pulse counter is read and saved.
@@ -74,14 +72,14 @@
   the number of overflow by 20000 and adding to the number of remaining pulses and dividing by 2, because it counted 2 times.
 
   As the pulses are counted on the way up and down, the count is double the frequency.
-  In the frequency value, points are inserted and printed on the serial monitor.
-  The registers are reset and the input control port is raised to a high level again and the pulse count starts.
+  In the frequency value, commas are inserted and printed on the serial monitor.
+  The registers are reset and the input control port is set to a high level again and the pulse count starts.
 
-  It also has a signal generator that generates 50,000 Hz, and can be used for testing.
-  This generator can be changed to generate frequencies up to 40 MHz. No, the frequency Meter cannot read this...
-  We use the led32 feature of ESP32 to generate frequency that can be used as a test.
-  The base frequency value is 2 (or 50,000) Hz, but it can be typed or another value on the serial monitor
-  The deafault duty cycle was set at 50%, but the resolution is properly calculated.
+  It also has a signal oscillator that generates pulses, and can be used for testing.
+  This oscillator can be configured to generate frequencies up to 40 MHz.
+  We use the LEDC peripheral of ESP32 to generate frequency that can be used as a test.
+  The base frequency value is 1000 Hz, but it can be typed to another value on the serial monitor.
+  The deafault duty cycle was set to 50%, and the resolution is properly calculated.
   The output port of this generator is currently defined as GPIO 25.
 
   Internally using GPIO matrix, the input pulse was directed to the ESP32 native LED,
@@ -107,7 +105,7 @@
 */
 
 #define LCD_OFF                                                           // To use LCD, set LCD_ON 
-#define LCD_I2C_ON                                                      // To use I2C LCD, set LCD_I2C_ON
+#define LCD_I2C_OFF                                                       // To use I2C LCD, set LCD_I2C_ON
 
 #include <stdio.h>                                                        // Libraries 
 #include "freertos/FreeRTOS.h"
@@ -125,20 +123,15 @@
 #include "sdkconfig.h"
 #include "math.h"
 
-//#ifdef LCD_ON                                                             // If using LCD
-
 #ifdef LCD_I2C_ON                                                         // If using I2C LCD 
 #include <LiquidCrystal_I2C.h>                                            // LCD I2C Library 
 LiquidCrystal_I2C lcd(0x3F, 16, 2);                                       // Define I2C address, columns and rows. Use I2C scanner to identify address
 #endif
 
-//#else
-#ifdef LCD_ON
+#ifdef LCD_ON                                                             // If using LCD
 #include <LiquidCrystal.h>                                                // LCD Library
 LiquidCrystal lcd(5, 18, 19, 21, 22, 23);                                 // Define LCD pins at parallel interface
 #endif
-
-//#endif
 
 #define PCNT_COUNT_UNIT       PCNT_UNIT_0                                 // Set Pulse Counter Unit - 0 
 #define PCNT_COUNT_CHANNEL    PCNT_CHANNEL_0                              // Set Pulse Counter channel - 0 
@@ -168,7 +161,7 @@ uint32_t        resolution    = 0;                                        // Res
 portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;                     // portMUX_TYPE to do synchronism
 
 //----------------------------------------------------------------------------------------
-char *ultos_recursive(unsigned long val, char *s, unsigned radix, int pos)
+char *ultos_recursive(unsigned long val, char *s, unsigned radix, int pos) // Format an unsigned long (32 bits) into a string
 {
   int c;
   if (val >= radix)
@@ -181,7 +174,7 @@ char *ultos_recursive(unsigned long val, char *s, unsigned radix, int pos)
 }
 
 //----------------------------------------------------------------------------------------
-char *ltos(long val, char *s, int radix)
+char *ltos(long val, char *s, int radix)                                   // Format an long (32 bits) into a string
 {
   if (radix < 2 || radix > 36) {
     s[0] = 0;
@@ -200,9 +193,9 @@ char *ltos(long val, char *s, int radix)
 //----------------------------------------------------------------------------
 void ledcInit ()                                                          // Optional Pulse Oscillator to test Freq Meter
 {
-  resolution = (log(80000000 / osc_freq) / log(2))/2;                     // Calc of resolution divided by 2 for accuracy
-  if (resolution < 1) resolution = 1;                                     // min resolution  
-  Serial.println(resolution);
+  resolution = (log(80000000 / osc_freq) / log(2)) / 2;                   // Calc of resolution divided by 2 for accuracy
+  if (resolution < 1) resolution = 1;                                     // min resolution
+  // Serial.println(resolution);
   mDuty = (pow(2, resolution)) / 2;                                       // Calc of Duty Cycle 50% - oscillator
   //  Serial.println(mDuty);
 
@@ -211,8 +204,8 @@ void ledcInit ()                                                          // Opt
   ledc_timer.duty_resolution = ledc_timer_bit_t (resolution);             // Set resolution
   ledc_timer.freq_hz    = osc_freq;                                       // Set Oscillator frequency
   ledc_timer.speed_mode = LEDC_HIGH_SPEED_MODE;                           // Set high speed mode
-  ledc_timer.timer_num = LEDC_TIMER_0;                                    // Set LEDC timer index
-  ledc_timer_config(&ledc_timer);                                         // Set LEDC Timer
+  ledc_timer.timer_num = LEDC_TIMER_0;                                    // Set LEDC timer index - 0
+  ledc_timer_config(&ledc_timer);                                         // Set LEDC Timer config
 
   ledc_channel_config_t ledc_channel = {};                                // LEDC Channel config instance
 
@@ -244,29 +237,29 @@ static void IRAM_ATTR pcnt_intr_handler(void *arg)                        // Cou
 }
 
 //----------------------------------------------------------------------------------
-void pcnt_init(void)                                                      // Rotina de inicializacao do pulse count
+void pcnt_init(void)                                                      // Initialize and run PCNT unit
 {
-  pcnt_config_t pcnt_config = { };                                        // Instancia pulse config
+  pcnt_config_t pcnt_config = { };                                        // PCNT unit instance
 
-  pcnt_config.pulse_gpio_num = PCNT_INPUT_SIG_IO;                         // Port de entrada dos pulsos
-  pcnt_config.ctrl_gpio_num = PCNT_INPUT_CTRL_IO;                         // Controle da contagem
-  pcnt_config.unit = PCNT_COUNT_UNIT;                                     // Unidade de contagem
-  pcnt_config.channel = PCNT_COUNT_CHANNEL;                               // Canal de contagem
-  pcnt_config.counter_h_lim = PCNT_H_LIM_VAL;                             // Limite maximo de contagem
-  pcnt_config.pos_mode = PCNT_COUNT_INC;                                  // Conta na subida do pulso
-  pcnt_config.neg_mode = PCNT_COUNT_INC;                                  // Conta na descida do pulso
-  pcnt_config.lctrl_mode = PCNT_MODE_DISABLE;                             // Nao usado
-  pcnt_config.hctrl_mode = PCNT_MODE_KEEP;                                // Se HIGH conta incrementando
-  pcnt_unit_config(&pcnt_config);                                         // Inicializa PCNT
+  pcnt_config.pulse_gpio_num = PCNT_INPUT_SIG_IO;                         // Pulse input GPIO 34 - Freq Meter Input
+  pcnt_config.ctrl_gpio_num = PCNT_INPUT_CTRL_IO;                         // Control signal input GPIO 35
+  pcnt_config.unit = PCNT_COUNT_UNIT;                                     // PCNT unit number - 0
+  pcnt_config.channel = PCNT_COUNT_CHANNEL;                               // PCNT channel number - 0
+  pcnt_config.counter_h_lim = PCNT_H_LIM_VAL;                             // Maximum counter value - 20000
+  pcnt_config.pos_mode = PCNT_COUNT_INC;                                  // PCNT positive edge count mode - inc
+  pcnt_config.neg_mode = PCNT_COUNT_INC;                                  // PCNT negative edge count mode - inc
+  pcnt_config.lctrl_mode = PCNT_MODE_DISABLE;                             // PCNT low control mode - disable
+  pcnt_config.hctrl_mode = PCNT_MODE_KEEP;                                // PCNT high control mode - won't change counter mode
+  pcnt_unit_config(&pcnt_config);                                         // Initialize PCNT unit
 
-  pcnt_counter_pause(PCNT_COUNT_UNIT);                                    // Inicializa o contador PCNT
-  pcnt_counter_clear(PCNT_COUNT_UNIT);                                    // Zera o contador PCNT
+  pcnt_counter_pause(PCNT_COUNT_UNIT);                                    // Pause PCNT unit
+  pcnt_counter_clear(PCNT_COUNT_UNIT);                                    // Clear PCNT unit
 
-  pcnt_event_enable(PCNT_COUNT_UNIT, PCNT_EVT_H_LIM);                     // Limite superior de contagem
-  pcnt_isr_register(pcnt_intr_handler, NULL, 0, NULL);                    // Rotina de Interrupt de pcnt
-  pcnt_intr_enable(PCNT_COUNT_UNIT);                                      // Habilita interrup de pcnt
+  pcnt_event_enable(PCNT_COUNT_UNIT, PCNT_EVT_H_LIM);                     // Enable event to watch - max count
+  pcnt_isr_register(pcnt_intr_handler, NULL, 0, NULL);                    // Setup Register ISR handler
+  pcnt_intr_enable(PCNT_COUNT_UNIT);                                      // Enable interrupts for PCNT unit
 
-  pcnt_counter_resume(PCNT_COUNT_UNIT);                                   // inicia a contagem
+  pcnt_counter_resume(PCNT_COUNT_UNIT);                                   // Resume PCNT unit - starts count
 }
 
 //----------------------------------------------------------------------------------
@@ -334,8 +327,10 @@ void setup()
 {
   Serial.begin(115200);                                                   // Init Serial Console Arduino 115200 Bps
   myInit();                                                               // Initial setup
+#ifdef LCD_I2C_ON                                                         // LCD
   lcd.init();                                                             // Init I2C LCD
   lcd.backlight();                                                        // Set I2C LCD Backlight ON
+#endif
 }
 
 //---------------------------------------------------------------------------------
