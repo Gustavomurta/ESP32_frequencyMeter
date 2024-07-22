@@ -1,3 +1,6 @@
+Best Frequency Meter ever made with ESP32 - awesome!
+https://www.esp32.com/viewtopic.php?f=19&t=17018&start=80#p135103
+
 For the happiness of those interested in the project, I am posting an update to the code and schematics.
 I chose another library for the LCD I2C Display. Simpler and functional with the new ESP32 firmware.
 I removed the option to connect directly to the LCD, as it was confusing for some.
