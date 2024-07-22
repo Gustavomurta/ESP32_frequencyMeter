@@ -14,5 +14,5 @@ If you are in doubt about the I2C address of your I2C LCD module, use the I2C sc
 ESP32 - I2C Scanner using Arduino IDE
 https://www.esp32.com/viewtopic.php?f=18&t=4742
 
-Add this library using the Arduino IDE library manager
+Add this library LCD-I2C using the Arduino IDE library manager
 https://github.com/hasenradball/LCD-I2C
