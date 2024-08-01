@@ -1,1 +1,9 @@
 
+The accuracy of the measurements is impressive!
+See measuring the two oscillators with 15.999 Hz signals on both channels of the ESP32 Frequency Meter.
+
+Arduino Console:
+Frequency CH0: 15,999 Hz
+Frequency CH1: 15,999 Hz
+
+Checking measurements with an oscilloscope.
