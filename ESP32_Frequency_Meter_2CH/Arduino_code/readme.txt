@@ -1,4 +1,19 @@
+// ESP32 Frequency Meter / 2 Channel - Version 2
+// ESP32 DevKit + I2C PCF8574 LCD
+// Arduino IDE 2.3.2   / ESP32 Arduino V 3.02
 
+// Gustavo Murta e Rui Viana august/2020 - 2024/07/29
+
+// https://blog.eletrogate.com/esp32-frequencimetro-de-precisao
+// https://www.esp32.com/viewtopic.php?f=19&t=17018
+
+// References:
+// https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/ledc.html
+// https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/esp_timer.html
+// https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/pcnt.html
+
+// LCD I2C SDA - GPIO_21
+// LCD I2C SCL - GPIO_22
 
 
 ///////////////////////////////////////////////////
