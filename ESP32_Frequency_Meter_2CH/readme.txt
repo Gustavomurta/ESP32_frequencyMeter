@@ -1,7 +1,7 @@
 ESP32 FREQUENCY METER - 2 CHANNELS: 
 
 Best Frequency Meter ever made with ESP32 - awesome! (Arduino Version)
-https://www.esp32.com/viewtopic.php?f=19&t=17018&start=80#p135103
+https://www.esp32.com/viewtopic.php?f=19&t=17018&start=80#p135509
 
 I am posting now an upgraded version with 2 chnnels - under development!!!
 
