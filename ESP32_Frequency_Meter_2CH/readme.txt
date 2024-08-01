@@ -6,7 +6,7 @@ https://www.esp32.com/viewtopic.php?f=19&t=17018&start=80#p135103
 I am posting now an upgraded version with 2 chnnels - under development!!!
 
 There is still a problem with the program - the interrupts of Pulse counter 0 is interfering with the interrupts of Pulse counter 1.
-This causes the program to crash.
+This causes the program to crash. Test both frequency meters with frequencies below 15999 Hz only for now.
 
 Maybe the solution is to configure the interrupt priorities of the two counters, but this is only allowed in the new drivers for PC Unit. 
 I think that to use this new driver version, I will have to make several changes. I am researching a solution.
