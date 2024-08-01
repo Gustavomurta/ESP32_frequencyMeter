@@ -6,7 +6,8 @@ https://www.esp32.com/viewtopic.php?f=19&t=17018&start=80#p135509
 I am posting now an upgraded version with 2 chnnels - under development!!!
 
 There is still a problem with the program - the interrupts of Pulse counter 0 is interfering with the interrupts of Pulse counter 1.
-This causes the program to crash. Test both frequency meters with frequencies below 15999 Hz only for now.
+This causes the program to crash, if frequencies are greater than 16,000 Hz. 
+Test both channels of the frequency meter with frequencies below 15999 Hz, only for now.
 
 Maybe the solution is to configure the interrupt priorities of the two counters, but this is only allowed in the new drivers for PC Unit. 
 I think that to use this new driver version, I will have to make several changes. I am researching a solution.
@@ -27,3 +28,8 @@ https://www.esp32.com/viewtopic.php?f=18&t=4742
 
 Add this library LCD-I2C using the Arduino IDE library manager
 https://github.com/hasenradball/LCD-I2C
+
+ESP32 API references used in this project:
+https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/ledc.html
+https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/esp_timer.html
+https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/pcnt.html
