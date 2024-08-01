@@ -2,7 +2,7 @@
 
 
 ///////////////////////////////////////////////////
-*Arduino Compiler Output*
+**Arduino Compiler Output**
 
 Sketch uses 316417 bytes (24%) of program storage space. Maximum is 1310720 bytes.
 Global variables use 20848 bytes (6%) of dynamic memory, leaving 306832 bytes for local variables. Maximum is 327680 bytes.
@@ -54,7 +54,7 @@ Leaving...
 Hard resetting via RTS pin...
 
 //////////////////////////////////////////////////////
-*Arduino Console - COM14 - 115200 baud*
+**Arduino Console - COM14 - 115200 baud**
 
 ets Jul 29 2019 12:21:46
 
@@ -68,7 +68,7 @@ ho 0 tail 12 room 4
 load:0x40080400,len:4
 load:0x40080404,len:3356
 entry 0x4008059c
-E (156) esp_corf�Eյ�}���͡� Core dump data check failed:   <<<<<<<  Please help me to solve this bug
+E (156) esp_corf�Eյ�}���͡� Core dump data check failed:   **<<<<<<<  Please help me to solve this bug**
 Calculated checksum='cbb3a019'
 Image che
  Input the Frequency - 1 to 40 MHz
