@@ -5,6 +5,9 @@ https://www.esp32.com/viewtopic.php?f=19&t=17018&start=80#p135103
 
 I am posting now an upgraded version with 2 chnnels - under development!!!
 
+There is still a problem with the program - the interrupts of Pulse counter 0 is interfering with the interrupts of Pulse counter 1.
+This causes the program to crash - I am researching a solution.
+
 I chose another library for the LCD I2C Display. Simpler and functional with the new ESP32 firmware.
 I removed the option to connect directly to the LCD, as it was confusing for some.
 I changed the inclusion of some ESP32 libraries, to make them compatible with the new ESP32 firmware.
