@@ -3,7 +3,7 @@ ESP32 FREQUENCY METER - 2 CHANNELS:
 Best Frequency Meter ever made with ESP32 - awesome! (Arduino Version)
 https://www.esp32.com/viewtopic.php?f=19&t=17018&start=80#p135509
 
-I am posting now an upgraded version with 2 chnnels - under development!!!
+I am posting now an upgraded version with 2 channels - under development!!!
 
 There is still a problem with the program - the interrupts of Pulse counter 0 is interfering with the interrupts of Pulse counter 1.
 This causes the program to crash, if frequencies are greater than 16,000 Hz. 
