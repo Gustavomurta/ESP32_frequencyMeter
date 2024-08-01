@@ -11,6 +11,8 @@ This causes the program to crash. Test both frequency meters with frequencies be
 Maybe the solution is to configure the interrupt priorities of the two counters, but this is only allowed in the new drivers for PC Unit. 
 I think that to use this new driver version, I will have to make several changes. I am researching a solution.
 
+I implemented a variable for calibrating measurements (offset)- calibrator => calibrator of frequency reading (may be + or - integer numbers).
+
 I chose another library for the LCD I2C Display. Simpler and functional with the new ESP32 firmware.
 I removed the option to connect directly to the LCD, as it was confusing for some.
 I changed the inclusion of some ESP32 libraries, to make them compatible with the new ESP32 firmware.
