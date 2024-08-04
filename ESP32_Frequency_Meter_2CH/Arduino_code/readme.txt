@@ -1,8 +1,8 @@
-// ESP32 Frequency Meter / 2 Channel - Version 2
+// ESP32 Frequency Meter / 2 Channel - Version 3
 // ESP32 DevKit + I2C PCF8574 LCD
 // Arduino IDE 2.3.2   / ESP32 Arduino V 3.02
 
-// Gustavo Murta e Rui Viana august/2020 - 2024/07/29
+// Gustavo Murta e Rui Viana august/2020 - 2024/07/30
 
 // https://blog.eletrogate.com/esp32-frequencimetro-de-precisao
 // https://www.esp32.com/viewtopic.php?f=19&t=17018
@@ -19,8 +19,8 @@
 ///////////////////////////////////////////////////
 **Arduino Compiler Output**
 
-Sketch uses 316417 bytes (24%) of program storage space. Maximum is 1310720 bytes.
-Global variables use 20848 bytes (6%) of dynamic memory, leaving 306832 bytes for local variables. Maximum is 327680 bytes.
+Sketch uses 316797 bytes (24%) of program storage space. Maximum is 1310720 bytes.
+Global variables use 20856 bytes (6%) of dynamic memory, leaving 306824 bytes for local variables. Maximum is 327680 bytes.
 esptool.py v4.6
 Serial port COM14
 Connecting....
@@ -40,29 +40,29 @@ Flash will be erased from 0x0000e000 to 0x0000ffff...
 Flash will be erased from 0x00010000 to 0x0005dfff...
 Compressed 19744 bytes to 13604...
 Writing at 0x00001000... (100 %)
-Wrote 19744 bytes (13604 compressed) at 0x00001000 in 0.4 seconds (effective 364.9 kbit/s)...
+Wrote 19744 bytes (13604 compressed) at 0x00001000 in 0.4 seconds (effective 361.1 kbit/s)...
 Hash of data verified.
 Compressed 3072 bytes to 146...
 Writing at 0x00008000... (100 %)
-Wrote 3072 bytes (146 compressed) at 0x00008000 in 0.1 seconds (effective 431.0 kbit/s)...
+Wrote 3072 bytes (146 compressed) at 0x00008000 in 0.1 seconds (effective 441.1 kbit/s)...
 Hash of data verified.
 Compressed 8192 bytes to 47...
 Writing at 0x0000e000... (100 %)
-Wrote 8192 bytes (47 compressed) at 0x0000e000 in 0.1 seconds (effective 624.5 kbit/s)...
+Wrote 8192 bytes (47 compressed) at 0x0000e000 in 0.1 seconds (effective 624.7 kbit/s)...
 Hash of data verified.
-Compressed 316784 bytes to 179694...
+Compressed 317168 bytes to 179910...
 Writing at 0x00010000... (9 %)
-Writing at 0x0001c24b... (18 %)
-Writing at 0x000271b4... (27 %)
-Writing at 0x0002c768... (36 %)
-Writing at 0x000320ee... (45 %)
-Writing at 0x0003770a... (54 %)
-Writing at 0x0003cd78... (63 %)
-Writing at 0x0004223e... (72 %)
-Writing at 0x000475d9... (81 %)
-Writing at 0x0004cea6... (90 %)
-Writing at 0x000562d1... (100 %)
-Wrote 316784 bytes (179694 compressed) at 0x00010000 in 3.4 seconds (effective 741.7 kbit/s)...
+Writing at 0x0001c222... (18 %)
+Writing at 0x000271b9... (27 %)
+Writing at 0x0002c76e... (36 %)
+Writing at 0x00032114... (45 %)
+Writing at 0x00037716... (54 %)
+Writing at 0x0003cd9f... (63 %)
+Writing at 0x0004228b... (72 %)
+Writing at 0x00047602... (81 %)
+Writing at 0x0004ce90... (90 %)
+Writing at 0x0005618b... (100 %)
+Wrote 317168 bytes (179910 compressed) at 0x00010000 in 3.5 seconds (effective 732.7 kbit/s)...
 Hash of data verified.
 
 Leaving...
@@ -83,28 +83,21 @@ ho 0 tail 12 room 4
 load:0x40080400,len:4
 load:0x40080404,len:3356
 entry 0x4008059c
-E (156) esp_corf�Eյ�}���͡� Core dump data check failed:   **<<<<<<<  Please help me to solve this bug**
+E (156) esp_cor�Eյ�}���͡� Core dump data check failed:   <<<<<<<  Please help me to solve this bug
 Calculated checksum='cbb3a019'
-Image che
- Input the Frequency - 1 to 40 MHz
+Image chec
+ Enter the Frequency - 1 to 40 MHz - First Osc 0 / Second Osc 1
  Oscillators have some accuracy limitations 
 
-Frequency CH0: 0 Hz 
 Frequency CH1: 0 Hz 
 
-Frequency CH0: 38,002 Hz 
-Frequency CH1: 10,000 Hz 
+Frequency CH0: 10,000 Hz 
+Frequency CH1: 20,001 Hz 
 
-Frequency CH0: 38,001 Hz 
-Frequency CH1: 10,000 Hz 
+Frequency CH0: 10,000 Hz 
+Frequency CH1: 20,000 Hz 
 
-Frequency CH0: 38,001 Hz 
-Frequency CH1: 10,000 Hz 
-
-Frequency CH0: 38,001 Hz 
-Frequency CH1: 10,000 Hz 
-
-Frequency CH0: 38,001 Hz 
-Frequency CH1: 10,000 Hz 
+Frequency CH0: 10,000 Hz 
+Frequency CH1: 20,000 Hz 
 
 //////////////////////////////////////////
