@@ -1,4 +1,4 @@
-// ESP32 Frequency Meter / 2 Channel - Version 3
+// ESP32 Frequency Meter / 2 Channel - Version 3  (use this Version) 
 // ESP32 DevKit + I2C PCF8574 LCD
 // Arduino IDE 2.3.2   / ESP32 Arduino V 3.02
 
