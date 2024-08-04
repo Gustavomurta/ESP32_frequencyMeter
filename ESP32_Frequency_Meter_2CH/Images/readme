@@ -10,6 +10,8 @@ Checking measurements with an oscilloscope.
 
 //////////////////////////////////////////////////////////////////////////////////////
 
+ESP32 Freq Meter 2CH board 20 MHz.JPG
+
 Testing my old Crystal Oscillators - 20.000 MHz and 14.318180 MHz. Very Good!
 
 Breadboards and long wires are susceptible to noise and can interfere with measurements. The ideal is to assemble the entire circuit on a printed circuit board and use shielded cables on the frequency meter inputs. But I will wait for other new implementations to the project.
