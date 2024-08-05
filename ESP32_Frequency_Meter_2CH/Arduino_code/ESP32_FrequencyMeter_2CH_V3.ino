@@ -39,7 +39,7 @@ LCD_I2C lcd(0x3F, 16, 2);  // Instance LCD I2C - address 0x3F
 #define PCNT_H_LIM_VAL overflow  // Overflow of Pulse Counter
 
 uint32_t overflow = 32000;       // Max Pulse Counter value 32000 - limit 32767
-uint32_t sample_time = 1000000;  // Sample time of 1 second to count pulses (change the value to calibrate frequency meter)
+uint32_t sample_time = 1000000;  // Sample time of 1 second to count pulses 
 uint calibrator = 1;             // calibrator of frequency reading (may be + or - integer numbers)
 
 bool flag_0 = false;        // Flag to enable print frequency reading
